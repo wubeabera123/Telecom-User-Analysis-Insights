@@ -60,6 +60,13 @@ class EDAAnalysis:
         applications = ['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 
                         'YouTube DL (Bytes)', 'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']
 
+        # Check which columns are actually in the dataset
+        missing_columns = [col for col in applications if col not in self.data.columns]
+        if missing_columns:
+            print("Warning: The following columns are missing from the dataset:", missing_columns)
+            # Optionally, remove missing columns from the list
+            applications = [col for col in applications if col in self.data.columns]
+
         # Iterate over each application column to create a scatter plot
         for app in applications:
             plt.figure(figsize=(10, 6))  # Set the figure size for each plot
@@ -71,18 +78,19 @@ class EDAAnalysis:
 
     def correlation_analysis(self):
         """Generate correlation matrix for application data."""
-        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'YouTube DL (Bytes)', 
+        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)', 
                               'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']]
         correlation_matrix = app_data.corr()
 
         plt.figure(figsize=(10, 6))
         sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
         plt.title('Correlation Matrix of Application Data')
+        print(correlation_matrix)
         plt.show()
 
     def pca_analysis(self):
         """Perform PCA and plot the components."""
-        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'YouTube DL (Bytes)', 
+        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)', 
                               'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']]
         scaler = StandardScaler()
         scaled_data = scaler.fit_transform(app_data)
