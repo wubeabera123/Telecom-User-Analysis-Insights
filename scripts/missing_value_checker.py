@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class MissingValueChecker:
     def __init__(self, data):
         """
@@ -16,31 +17,18 @@ class MissingValueChecker:
         missing_data = self.data.isnull().sum()
         return missing_data[missing_data > 0].sort_values(ascending=False)
 
-    def fill_missing_by_type(self):
+    def fill_missing_with_mean(self):
         """
-        Fill missing values based on data type:
-        - For categorical data: Fill with mode (most frequent value), and handle 'undefined' by replacing with 'unknown'
-        - For numerical data: Fill with median
+        Fill missing values in numeric columns with the mean of those columns.
         """
-        for column in self.data.columns:
-            if self.data[column].dtype == 'object':  # Categorical data (strings, etc.)
-                # Replace 'undefined' with 'unknown'
-                self.data[column] = self.data[column].replace('undefined', 'unknown')
-                # Get the mode (most frequent value)
-                mode_value = self.data[column].mode()
-                if not mode_value.empty:  # Check if mode is not empty
-                    # Replace missing values with the mode and reassign the column
-                    self.data[column] = self.data[column].fillna(mode_value[0])
-                else:
-                    print(f"No mode found for column: {column}. Skipping fill.")
-            else:  # Numerical data (integers, floats)
-                median_value = self.data[column].median()  # Get the median value
-                # Replace missing values with the median and reassign the column
-                self.data[column] = self.data[column].fillna(median_value)
-                # Convert numerical columns to int64 if they don't have any NaNs left
-                if self.data[column].isnull().sum() == 0:
-                    self.data[column] = self.data[column].astype('int64')
+        # Select only numeric columns
+        numeric_columns = self.data.select_dtypes(include=['number']).columns
 
+        # Fill missing values in numeric columns with the mean of each column
+        for col in numeric_columns:
+            if self.data[col].isnull().sum() > 0:
+                self.data[col].fillna(self.data[col].mean(), inplace=True)
+                print(f"Filled missing values in column: {col}")
 
     def get_cleaned_data(self):
         """

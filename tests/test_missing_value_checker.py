@@ -17,9 +17,9 @@ class TestMissingValueChecker(unittest.TestCase):
         result = self.checker.check_missing().sort_index()
         pd.testing.assert_series_equal(result, expected_missing.sort_index())
 
-    def test_fill_missing_by_type(self):
+    def fill_missing_with_mean(self):
     # Fill missing values
-        self.checker.fill_missing_by_type()
+        self.checker.fill_missing_with_mean()
         
         # Expected results with corrected data types
         expected_df = pd.DataFrame({
