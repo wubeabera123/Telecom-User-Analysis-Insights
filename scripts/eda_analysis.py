@@ -58,7 +58,7 @@ class EDAAnalysis:
 
         # List of application columns to compare against total data
         applications = ['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 
-                        'Youtube DL (Bytes)', 'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']
+                        'YouTube DL (Bytes)', 'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']
 
         # Iterate over each application column to create a scatter plot
         for app in applications:
