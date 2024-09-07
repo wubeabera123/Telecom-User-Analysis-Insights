@@ -93,18 +93,6 @@ class UserEngagementAnalysis:
 
         return cluster_stats
 
-    def aggregate_traffic_per_application(self):
-        """Aggregate user total traffic per application and find the top 10 most engaged users per app."""
-        app_data = self.data.groupby(['MSISDN/Number', 'Handset Type']).agg(
-            total_traffic=('Total UL (Bytes)', 'sum') + self.data['Total DL (Bytes)'].sum()
-        ).reset_index()
-
-        top_users_per_app = app_data.groupby('Handset Type').apply(
-            lambda x: x.nlargest(10, 'total_traffic')
-        ).reset_index(drop=True)
-
-        return top_users_per_app
-
     def plot_top_3_apps(self, app_data):
         """Plot the top 3 most used applications."""
         top_3_apps = app_data.groupby('Handset Type').agg(total_traffic=('total_traffic', 'sum')).nlargest(3, 'total_traffic').reset_index()
@@ -115,3 +103,31 @@ class UserEngagementAnalysis:
         plt.ylabel('Total Traffic')
         plt.xlabel('Handset Type')
         plt.show()
+
+
+    def aggregate_traffic_per_application(self):
+        """Aggregate user total traffic per application and find the top 10 most engaged users per app."""
+        
+        # Convert 'Total UL (Bytes)' and 'Total DL (Bytes)' to numeric, handling non-numeric values
+        self.data['Total UL (Bytes)'] = pd.to_numeric(self.data['Total UL (Bytes)'], errors='coerce')
+        self.data['Total DL (Bytes)'] = pd.to_numeric(self.data['Total DL (Bytes)'], errors='coerce')
+
+        # Check if the conversion worked correctly
+        if self.data['Total UL (Bytes)'].isnull().all() or self.data['Total DL (Bytes)'].isnull().all():
+            raise ValueError("Columns 'Total UL (Bytes)' or 'Total DL (Bytes)' have invalid data and could not be converted to numeric.")
+        
+        # Create a new column 'total_traffic' by summing UL and DL
+        self.data['total_traffic'] = self.data['Total UL (Bytes)'] + self.data['Total DL (Bytes)']
+
+        # Group by 'MSISDN/Number' and 'Handset Type', then sum 'total_traffic'
+        app_data = self.data.groupby(['MSISDN/Number', 'Handset Type']).agg(
+            total_traffic=('total_traffic', 'sum')
+        ).reset_index()
+
+        # Find the top 10 most engaged users per application (Handset Type)
+        top_users_per_app = app_data.groupby('Handset Type').apply(
+            lambda x: x.nlargest(10, 'total_traffic')
+        ).reset_index(drop=True)
+
+        return top_users_per_app
+    
