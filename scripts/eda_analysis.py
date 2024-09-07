@@ -78,8 +78,7 @@ class EDAAnalysis:
 
     def correlation_analysis(self):
         """Generate correlation matrix for application data."""
-        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)', 
-                              'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']]
+        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)', 'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']]
         correlation_matrix = app_data.corr()
 
         plt.figure(figsize=(10, 6))
@@ -90,8 +89,7 @@ class EDAAnalysis:
 
     def pca_analysis(self):
         """Perform PCA and plot the components."""
-        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)', 
-                              'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']]
+        app_data = self.data[['Social Media DL (Bytes)', 'Google DL (Bytes)', 'Email DL (Bytes)', 'Youtube DL (Bytes)', 'Netflix DL (Bytes)', 'Gaming DL (Bytes)', 'Other DL (Bytes)']]
         scaler = StandardScaler()
         scaled_data = scaler.fit_transform(app_data)
 

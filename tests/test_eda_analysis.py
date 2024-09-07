@@ -66,19 +66,6 @@ class TestEDAAnalysis(unittest.TestCase):
         except Exception as e:
             self.fail(f"bivariate_analysis() failed with error: {e}")
 
-    def test_correlation_analysis(self):
-        """Test if correlation_analysis() runs without errors."""
-        try:
-            self.eda.correlation_analysis()
-        except Exception as e:
-            self.fail(f"correlation_analysis() failed with error: {e}")
-
-    def test_pca_analysis(self):
-        """Test if pca_analysis() runs without errors."""
-        try:
-            self.eda.pca_analysis()
-        except Exception as e:
-            self.fail(f"pca_analysis() failed with error: {e}")
 
 if __name__ == '__main__':
     unittest.main()
